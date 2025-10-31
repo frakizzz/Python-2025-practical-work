@@ -83,4 +83,4 @@ print("METHOD OF INVERSE MATRIX ")
 x_inverse = inverse_matrix_method(A, B)
 print("RESULT (INVERSE):", x_inverse, "\n")
 
-print("END OF PROGRAM ")
+print("END OF PROGRAM")
