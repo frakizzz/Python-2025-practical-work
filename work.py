@@ -8,7 +8,6 @@ A = np.array([
 
 B = np.array([2, 0, 1], dtype=float)
 
-
 # METHOD OF CRAMER
 def cramer_method(A, B):
     det_A = np.linalg.det(A)
@@ -24,7 +23,6 @@ def cramer_method(A, B):
         det_Ai = np.linalg.det(Ai)
         result.append(det_Ai / det_A)
     return np.array(result)
-
 
 # GAUSS METHOD
 def gauss_method(A, B):
@@ -63,7 +61,6 @@ def inverse_matrix_method(A, B):
         return None
     A_inv = np.linalg.inv(A)
     return np.dot(A_inv, B)
-
 
 # MAIN PROGA
 print("SOLVING SYSTEM OF LINEAR EQUATIONS\n")
