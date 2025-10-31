@@ -1,12 +1,12 @@
 import numpy as np
 
 A = np.array([
-    [8, 5, -2],
-    [3, 3, -3],
-    [4, -5, -1]
+    [1, 1, 1],
+    [2, -1, 3],
+    [1, 4, 2]
 ], dtype=float)
 
-B = np.array([2, 0, 1], dtype=float)
+B = np.array([6, 14, 20], dtype=float)
 
 # METHOD OF CRAMER
 def cramer_method(A, B):
