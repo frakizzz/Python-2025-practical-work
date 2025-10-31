@@ -1,9 +1,9 @@
 import numpy as np
 
 A = np.array([
-    [5, 3, -2],
-    [3, 2, -3],
-    [4, 2, -1]
+    [8, 5, -2],
+    [3, 3, -3],
+    [4, -5, -1]
 ], dtype=float)
 
 B = np.array([2, 0, 1], dtype=float)
