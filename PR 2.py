@@ -7,7 +7,6 @@ try:
 except:
     np = None
 
-
 def jacobi_method(A, b, x0=None, eps=1e-3, max_iter=10000):
     if np is not None:
         A = np.array(A, dtype=float)
