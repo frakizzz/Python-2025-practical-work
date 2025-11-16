@@ -213,7 +213,7 @@ class SLRApp(tk.Tk):
             self.text_out.insert('end', f"Норма нев'язки: {rnorm:.6e}\n")
             self.text_out.see('end')
         except Exception as e:
-            messagebox.showerror("Помилка", str(e))
+            messagebox.showerror("Помилка.", str(e))
 
 
 if __name__ == "__main__":
