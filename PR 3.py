@@ -45,4 +45,4 @@ if __name__ == "__main__":
 
     print("Корінь методом половинного ділення:", root_bis)
     print("Корінь методом Ньютона:", root_newt)
-    print("Корінь методом хорд:", root_chord)
+    print("Корінь методом хорд", root_chord)
