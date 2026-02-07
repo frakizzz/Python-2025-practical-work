@@ -68,4 +68,4 @@ def calculate_integral(func_str, a_str, b_str, n_str):
         return {"error": str(e), "result": None, "image": None}
 
 if __name__ == '__main__':
-    eel.start('index.html', size=(800, 750))
+    eel.start('index.html', mode='edge', size=(800, 750))
