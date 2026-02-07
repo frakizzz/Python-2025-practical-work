@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Мульти-Метод Інтегратор</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f8fafc; color: #334155; }
+        .main-wrapper { display: flex; gap: 20px; max-width: 1000px; margin: 0 auto; flex-wrap: wrap; }
+        .panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); flex: 1; min-width: 300px; }
+        h2 { margin-top: 0; color: #1e293b; font-size: 1.5rem; }
+        label { display: block; margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+        input { padding: 10px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%; box-sizing: border-box; font-size: 1rem; }
+        .row { display: flex; gap: 10px; }
+        .row input { width: 50%; }
+        button { width: 100%; background-color: #3b82f6; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #2563eb; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f1f5f9; color: #475569; font-weight: 600; }
+        tr:last-child td { border-bottom: none; }
+        .val { font-family: 'Consolas', monospace; color: #0f172a; font-weight: bold; }
+        .method-name { color: #64748b; font-size: 0.9rem; }
+
+        #plot-area img { width: 100%; height: auto; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px; }
+        .error { color: #ef4444; background: #fee2e2; padding: 10px; border-radius: 6px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="panel">
+        <h2>Параметри</h2>
+        <label>Функція f(x):</label>
+        <input type="text" id="func" placeholder="x**2, sin(x), exp(-x**2)" value="x * sin(x**2)">
+
+        <div class="row">
+            <div>
+                <label>Від (a):</label>
+                <input type="number" id="a" value="0">
+            </div>
+            <div>
+                <label>До (b):</label>
+                <input type="number" id="b" value="3">
+            </div>
+        </div>
+
+        <label>Кількість розбиттів (n):</label>
+        <input type="number" id="n" value="50">
+        <small style="color: #64748b; display: block; margin-top: 5px;">*Для Гаусса це ступінь полінома</small>
+
+        <button onclick="calculate()">Розрахувати всіма методами</button>
+        <div id="error-msg" class="error"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Результати</h2>
+        <div id="results-table">
+            <p style="color: #94a3b8; text-align: center; margin-top: 50px;">Натисніть "Розрахувати", щоб побачити дані</p>
+        </div>
+        <div id="plot-area"></div>
+    </div>
+</div>
+
+<script>
+    async function calculate() {
+        let func = document.getElementById('func').value;
+        let a = document.getElementById('a').value;
+        let b = document.getElementById('b').value;
+        let n = document.getElementById('n').value;
+
+        let tableDiv = document.getElementById('results-table');
+        let plotDiv = document.getElementById('plot-area');
+        let errorDiv = document.getElementById('error-msg');
+
+        tableDiv.style.opacity = "0.5";
+        errorDiv.style.display = "none";
+
+        let response = await eel.calculate_integral(func, a, b, n)();
+
+        tableDiv.style.opacity = "1";
+
+        if (response.error) {
+            errorDiv.innerText = "Помилка: " + response.error;
+            errorDiv.style.display = "block";
+        } else {
+            let r = response.results;
+            let html = `
+            <table>
+                <thead>
+                    <tr><th>Метод</th><th>Результат</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="method-name">Прямокутників (Лівих)</td><td class="val">${r.rect_left.toFixed(6)}</td></tr>
+                    <tr><td class="method-name">Прямокутників (Правих)</td><td class="val">${r.rect_right.toFixed(6)}</td></tr>
+                    <tr><td class="method-name">Прямокутників (Середніх)</td><td class="val">${r.rect_mid.toFixed(6)}</td></tr>
+                    <tr><td class="method-name">Трапецій (Ньютона-Котеса n=1)</td><td class="val">${r.trapezoid.toFixed(6)}</td></tr>
+                    <tr><td class="method-name">Сімпсона (Ньютона-Котеса n=2)</td><td class="val">${r.simpson.toFixed(6)}</td></tr>
+                    <tr><td class="method-name">Гаусса-Лежандра</td><td class="val" style="color: #2563eb;">${r.gauss.toFixed(8)}</td></tr>
+                </tbody>
+            </table>
+            `;
+            tableDiv.innerHTML = html;
+            plotDiv.innerHTML = '<img src="data:image/png;base64,' + response.image + '">';
+        }
+    }
+</script>
+
+</body>
+</html>
