@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Інтегральний Калькулятор</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #f4f4f9; text-align: center; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { padding: 10px; margin: 5px; border: 1px solid #ddd; border-radius: 5px; width: 40%; }
+        input.full-width { width: 90%; }
+        button { background-color: #4CAF50; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 15px; }
+        button:hover { background-color: #45a049; }
+        #result-area { margin-top: 20px; font-weight: bold; font-size: 1.2em; color: #333; }
+        #plot-area { margin-top: 20px; }
+        img { max-width: 100%; border-radius: 5px; border: 1px solid #eee; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Калькулятор Інтегралів</h2>
+
+        <label>Функція f(x):</label><br>
+        <input type="text" id="func" class="full-width" placeholder="наприклад: x**2 або sin(x)" value="sin(x)"><br>
+
+        <label>Межі (a, b):</label><br>
+        <input type="number" id="a" placeholder="a" value="0">
+        <input type="number" id="b" placeholder="b" value="3.14159"><br>
+
+        <label>Кількість розбиттів (n):</label><br>
+        <input type="number" id="n" value="100" class="full-width"><br>
+
+        <button onclick="calculate()">Обчислити та Накреслити</button>
+
+        <div id="result-area"></div>
+        <div id="plot-area"></div>
+    </div>
+
+    <script>
+        async function calculate() {
+            let func = document.getElementById('func').value;
+            let a = document.getElementById('a').value;
+            let b = document.getElementById('b').value;
+            let n = document.getElementById('n').value;
+
+            let resultDiv = document.getElementById('result-area');
+            let plotDiv = document.getElementById('plot-area');
+
+            resultDiv.innerHTML = "Обчислення...";
+            plotDiv.innerHTML = "";
+
+            let response = await eel.calculate_integral(func, a, b, n)();
+
+            if (response.error) {
+                resultDiv.innerHTML = "Помилка: " + response.error;
+                resultDiv.className = "error";
+            } else {
+                resultDiv.innerHTML = "Результат: " + response.result.toFixed(6);
+                plotDiv.innerHTML = '<img src="data:image/png;base64,' + response.image + '">';
+                resultDiv.className = "";
+            }
+        }
+    </script>
+</body>
+</html>
